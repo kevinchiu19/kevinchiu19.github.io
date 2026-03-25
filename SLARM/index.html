@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SLARM</title>
+  <link rel="stylesheet" href="./css/styles.css">
+  <link rel="stylesheet" href="./katex/katex.min.css">
+  <script defer src="./js/scripts.js"></script>
+  <script defer src="./js/fontawesome.all.min.js"></script>
+</head>
+
+<body>
+  <header class="header">
+    <div class="container">
+      <!-- <h1 class="title"><span style="color: rgb(36, 12, 146);">SLARM</span>: <span
+          style="color: rgb(62, 128, 91);">Streaming</span> and <span
+          style="color: rgb(93, 129, 8);">Language-Aligned</span> Reconstruction Model for <span
+          style="color: rgb(211, 112, 55);">Dynamic</span> Scenes</h1> -->
+      <style>
+          @keyframes gradient-shift {
+              0% {
+                  background-position: 0% 50%;
+              }
+
+              50% {
+                  background-position: 100% 50%;
+              }
+
+              100% {
+                  background-position: 0% 50%;
+              }
+          }
+
+          .animated-gradient {
+              display: inline-block;
+              background: linear-gradient(90deg,
+                      #240c92, #3e805b, #5d8108, #d37037,
+                      #240c92, #3e805b, #5d8108, #d37037);
+              background-size: 400% 100%;
+              -webkit-background-clip: text;
+              background-clip: text;
+              color: transparent;
+              animation: gradient-shift 8s ease infinite;
+              padding: 2px 0;
+              /* 确保背景覆盖完整 */
+          }
+      </style>
+      <h1 class="title">
+          <span class="animated-gradient">SLARM</span>: Streaming and Language-Aligned Reconstruction Model for Dynamic Scenes
+      </h1>
+
+      <p class="authors">
+        Zhicheng Qiu<sup>⋆†</sup>, Jiarui Meng<sup>⋆</sup>, Tong-an Luo<sup>⋆</sup>, Yican Huang, Xuan Feng, Xuanfu Li, Zhan Xu<sup>‡</sup>
+      </p>
+      <p class="affiliations">
+        Huawei Technologies Ltd.
+      </p>
+      <p class="affiliations">
+        {chiu.chih.cheng, mengjiarui, luotongan, huangyican, fengxuan18, lixuanfu, zhan.xu}@huawei.com<br>
+        <small>⋆ denotes equal contribution, † denotes project lead, ‡ denotes corresponding author</small>
+      </p>
+      <br>
+      <div class="links-container">
+        <div class="publication-links">
+          <!-- PDF Link. -->
+          <span class="link-block">
+            <a href="https://arxiv.org/abs/2603.22893" class="external-link button is-normal is-rounded is-dark">
+              <span class="icon">
+                <i class="fas fa-file-pdf"></i>
+              </span>
+              <span>Paper</span>
+            </a>
+          </span>
+          <!-- Code Link. -->
+          <span class="link-block">
+            <a href="https://github.com/kevinchiu19/SLARM" class="external-link button is-normal is-rounded is-dark">
+              <span class="icon">
+                <i class="fab fa-github"></i>
+              </span>
+              <span>Code</span>
+            </a>
+          </span>
+        </div>
+      </div>
+  </header>
+  
+  <main class="container">
+      <section id="abstract" class="section-card">
+        <h2>Abstract</h2>        
+        <div class="overview-image">
+          <img src="assets/figure/Figure-1.png" alt="Method Overview" loading="lazy">
+        </div>
+        <p>We propose <strong>SLARM</strong>, a feed-forward model that unifies <strong>dynamic scene reconstruction, semantic understanding, and real-time streaming inference</strong>. SLARM captures complex, non-uniform motion through higher-order motion modeling, trained solely on differentiable renderings without any flow supervision. Besides, SLARM distills semantic features from LSeg to obtain language-aligned representations. This design enables semantic querying via natural language, and the tight coupling between semantics and geometry further enhances the accuracy and robustness of dynamic reconstruction. Moreover, SLARM processes image sequences using window-based causal attention, achieving stable, low-latency streaming inference without accumulating memory cost. Within this unified framework, SLARM achieves state-of-the-art results in dynamic estimation, rendering quality, and scene parsing, improving motion accuracy by <strong>21%</strong>, reconstruction PSNR by <strong>1.6 dB</strong>, and segmentation mIoU by <strong>20%</strong> over existing methods.</p>
+      </section>
+
+      <section id="model" class="section-card">
+        <h2>Model / Pipeline</h2>
+        <div class="example-card">
+          <div class="grid-1x1">
+            <img src="assets/figure/Figure-2.png" alt="pipeline">
+          </div>
+          <p>Our method, <strong>SLARM</strong>, follows the pipeline illustrated in Figure. Given a video sequence <span class="math-inline">\{\mathbf{I}_t\}_{t=1}^{T}</span>, we first extract visual features using a Vision Transformer, where each frame <span class="math-inline">\mathbf{I}_t</span> is partitioned into non-overlapping patches. To inject geometric priors, we encode each pixel's viewing ray as a 6D Plücker coordinate derived from known camera intrinsics and extrinsics, linearly project it, and add it to the corresponding visual tokens. Temporal context is incorporated through a learnable embedding of the absolute timestamp <span class="math-inline">t</span>. Following STORM, we further concatenate two specialized tokens: a Sky token to model the background sky region and an Affine token to compensate for exposure and white-balance variations across multi-view cameras. The resulting enriched token sequence is then processed by VGGT, which alternates between frame-wise and global self-attention to effectively capture spatio-temporal structure.</p>
+        </div>
+      </section>
+  
+      <section id="results" class="section-card">
+        <h2>Experimental Results</h2>
+        <div class="example-card">
+            <p>As shown in Table 1. <strong>SLARM</strong> outperforms all generalizable feed-forward methods across all metrics, with consistent gains of <strong>1.6 dB</strong> in PSNR on full images and improvements of over <strong>1.5 dB</strong> in PSNR and <strong>0.07</strong> in SSIM on dynamic regions. The semantic segmentation quantitative results are summarized in Table 2. <strong>SLARM</strong> achieves highly coherent and accurate semantic predictions within the 3D reconstruction pipeline, and outperforms the strong 2D baselines. As shown in Table 3, <strong>SLARM-F</strong> achieves an EPE of <strong><span class="math-inline">0.240 m</span></strong>, outperforming NSFP (<span class="math-inline">0.703 m</span>) and STORM (<span class="math-inline">0.304 m</span>). Additionally, it attains Acc₅ and Acc₁₀ of <strong>78.15%</strong> and <strong>83.08%</strong>, respectively, significantly higher than other methods.</p>
+            <div class="grid-1x1">
+              <img src="assets/table/table1&2.png" alt="table1&2">
+            </div>
+            <br>
+            <div class="table3-container"> 
+              <img src="assets/table/table3.png" alt="table3">
+            </div>
+            <br>
+            <div class="time-img"> 
+              <img src="assets/online_vs_offline.png" alt="time">
+          </div>
+        </div>
+      </section>
+
+      <!-- vedio-selection -->
+      <section id="demo-video" class="section-card">
+        <h2>4DGS (with Semantic) Visualization</h2>
+        <p>We input the 4DGS predicted by <strong>SLARM</strong> into a <strong>3DGS visualizer</strong> to showcase the results from a new perspective. The results demonstrate that our method accurately reconstructs dynamic motion in the scene. Simultaneously, we obtain the corresponding categories of the <strong>language-aligned semantic features predicted</strong> by the model through <strong>text query</strong> and assign specific colors to each category, allowing for a better observation of the 4D semantic information.</p>
+        <video controls playsinline muted loop class="auto-play-video" id="demo-video-player">
+          <source src="assets/novel view/scene_1_record.mp4" type="video/mp4">
+        </video>
+      
+        <div class="video-selector">
+          <button type="button" class="selector-item active" data-src="assets/novel view/scene_1_record.mp4" data-label="Waymo_scencexx">
+            Waymo_scence1
+          </button>
+          <button type="button" class="selector-item" data-src="assets/novel view/scene_2_record.mp4" data-label="Waymo_scenceyy">
+            Waymo_scence2
+          </button>
+          <button type="button" class="selector-item" data-src="assets/novel view/scene_3_record.mp4" data-label="Waymo_scencezz">
+            Waymo_scence3
+          </button>
+          <button type="button" class="selector-item" data-src="assets/novel view/scene_4_record.mp4" data-label="Waymo_scencezz">
+            Waymo_scence4
+          </button>
+        </div>
+      </section>
+
+      <section id="results" class="section-card">
+        <h2>Streaming Scene Reconstruction</h2>
+        <p>This is a schematic diagram of <strong>incremental inference</strong> of the <strong>SLARM</strong> model in online mode. The <span style="color: rgb(194, 36, 36);"><strong>red view frustum</strong></span> represents the current frame being inferred at each time step, the <span style="color: rgb(202, 202, 56);"><strong>yellow view frustum</strong></span> represents the frame within the window attention interaction window when calculating the result of the current frame, and the <strong>black view frustum</strong> represents the historical frames. 
+          We also accumulate the historical point cloud results and increase the transparency of the historical point cloud to more clearly distinguish the current frame from the historical frames.</p>
+        <div class="streaming-vedio">
+          <video controls playsinline muted loop class="auto-play-video">
+            <source src="assets/stream_inference.mp4" type="video/mp4">
+          </video>
+          </div>         
+      </section>
+
+<!-- slide vedio ------------------------ SLARM-F -->
+      <section id="results" class="section-card">
+        <h2><span style="color: rgb(162, 163, 161);">Offline</span> Feed-forward Reconstruction Examples</h2>  
+        <p><strong>SLARM</strong> reconstructs 3D representations, <strong>3d scene flow</strong> and <strong>language-aligned semantic</strong> in a feed-forward manner. For each example, we present the input frames (Context RGB), <strong>reconstructed RGB, depth maps, predicted semantic feature, and predicted scene flow</strong>. Ground truth scene flows are included for qualitative comparison, though they are not used for supervision.
+          It can be observed that <strong>SLARM</strong> is able to model diverse scene motions. We perform PCA on the semantic features to reduce them to 3 dimensions, then convert them into RGB images for visualization. After fine-tuning with semantically annotated data, as the category assignments have undergone significant changes (e.g., all vegetation is categorized as "others"), the model-predicted features and the target features for knowledge distillation exhibit numerical discrepancies, resulting in distinct color differences in the visualized feature maps.
+          </p>    
+        <div class="video-slider">
+          <!-- page 1 -->
+          <div class="slide">
+            <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+              <source src="assets/SLARM_offline/scene_id_23_70-86.mp4" type="video/mp4">
+            </video>
+            <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+              <source src="assets/SLARM_offline/scene_id_80_20-36.mp4" type="video/mp4">
+            </video>
+          </div>
+      
+          <!-- page 2 -->
+          <div class="slide">
+            <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+              <source src="assets/SLARM_offline/scene_id_89_47-63.mp4" type="video/mp4">
+            </video>
+            <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+              <source src="assets/SLARM_offline/scene_id_223_15-31.mp4" type="video/mp4">
+            </video>
+          </div>
+      
+          <!-- page 3 -->
+          <div class="slide">
+            <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+              <source src="assets/SLARM_offline/scene_id_236_43-59.mp4" type="video/mp4">
+            </video>
+            <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+              <source src="assets/SLARM_offline/scene_id_336_26-39.mp4" type="video/mp4">
+            </video>
+          </div>
+      
+          <!-- page 4 -->
+          <div class="slide">
+            <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+              <source src="assets/SLARM_offline/scene_id_365_37-53.mp4" type="video/mp4"> 
+            </video>
+            <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+              <source src="assets/SLARM_offline/scene_id_367_10-26.mp4" type="video/mp4">
+            </video>
+          </div>
+      
+          <!-- page 5 -->
+          <div class="slide">
+            <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+              <source src="assets/SLARM_offline/scene_id_407_86-102.mp4" type="video/mp4">
+            </video>
+            <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+              <source src="assets/SLARM_offline/scene_id_473_13-29.mp4" type="video/mp4">
+            </video>
+          </div>
+
+          <!-- page 6 -->
+          <div class="slide">
+            <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+              <source src="assets/SLARM_offline/scene_id_563_22-38.mp4" type="video/mp4">
+            </video>
+            <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+              <source src="assets/SLARM_offline/scene_id_710_53-69.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      
+        <!-- control btn-->
+        <div class="slider-controls">
+          <button class="prev-btn" aria-label="last page">&lt;</button>
+          <div class="dots-container">
+            <span class="dot active" data-slide="0"></span>
+            <span class="dot" data-slide="1"></span>
+            <span class="dot" data-slide="2"></span>
+            <span class="dot" data-slide="3"></span>
+            <span class="dot" data-slide="4"></span>            
+            <span class="dot" data-slide="5"></span>
+          </div>
+          <button class="next-btn" aria-label="next page">&gt;</button>
+        </div>
+      </section>   
+
+<!-- slide vedio ------------------------ SLARM-W -->
+    <section id="results" class="section-card">
+      <h2><span style="color: rgb(109, 201, 122);">Online</span> Incremental Reconstruction Examples</h2>    
+      <p>This is the result of the <strong>SLARM</strong> model in <strong>incremental inference</strong>. The results show that the inference results from offline and online modes are not significantly different, indicating that we can maintain good accuracy while reducing the amount of computation. In terms of inference time, our online mode exhibits linear time complexity, whereas the offline mode demonstrates quadratic growth. Regarding memory consumption, the online mode maintains a stable memory footprint, while the offline mode incurs an unacceptably high and rapidly increasing memory usage.</p>
+      <div class="video-slider">   
+        <!-- page 1 -->
+        <div class="slide">
+          <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+            <source src="assets/SLARM_online/scene_id_23_70-86.mp4" type="video/mp4">
+          </video>
+          <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+            <source src="assets/SLARM_online/scene_id_80_20-36.mp4" type="video/mp4">
+          </video>
+        </div>
+    
+        <!-- page 2 -->
+        <div class="slide">
+          <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+            <source src="assets/SLARM_online/scene_id_89_47-63.mp4" type="video/mp4">
+          </video>
+          <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+            <source src="assets/SLARM_online/scene_id_223_15-31.mp4" type="video/mp4">
+          </video>
+        </div>
+    
+        <!-- page 3 -->
+        <div class="slide">
+          <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+            <source src="assets/SLARM_online/scene_id_236_43-59.mp4" type="video/mp4">
+          </video>
+          <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+            <source src="assets/SLARM_online/scene_id_336_26-39.mp4" type="video/mp4">
+          </video>
+        </div>
+    
+        <!-- page 4 -->
+        <div class="slide">
+          <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+            <source src="assets/SLARM_online/scene_id_365_37-53.mp4" type="video/mp4"> 
+          </video>
+          <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+            <source src="assets/SLARM_online/scene_id_367_10-26.mp4" type="video/mp4">
+          </video>
+        </div>
+    
+        <!-- page 5 -->
+        <div class="slide">
+          <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+            <source src="assets/SLARM_online/scene_id_407_86-102.mp4" type="video/mp4">
+          </video>
+          <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+            <source src="assets/SLARM_online/scene_id_473_13-29.mp4" type="video/mp4">
+          </video>
+        </div>
+
+        <!-- page 6 -->
+        <div class="slide">
+          <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+            <source src="assets/SLARM_online/scene_id_563_22-38.mp4" type="video/mp4">
+          </video>
+          <video autoplay controls playsinline muted loop class="auto-play-video-slide">
+            <source src="assets/SLARM_online/scene_id_710_53-69.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <!-- control btn-->
+      <div class="slider-controls">
+        <button class="prev-btn" aria-label="last page">&lt;</button>
+        <div class="dots-container">
+          <span class="dot active" data-slide="0"></span>
+          <span class="dot" data-slide="1"></span>
+          <span class="dot" data-slide="2"></span>
+          <span class="dot" data-slide="3"></span>
+          <span class="dot" data-slide="4"></span>
+          <span class="dot" data-slide="5"></span>
+        </div>
+        <button class="next-btn" aria-label="next page">&gt;</button>
+      </div>
+    </section>
+
+    <section id="bibtex" class="section-card">
+      <h2>BibTeX</h2>
+      <pre id="bibtex-text">@article{slarm2026,
+  title = {{SLARM}: Streaming and Language-Aligned Reconstruction Model for Dynamic Scenes},
+  author = {Zhicheng Qiu and Jiarui Meng and Tong-an Luo and Yican Huang and Xuan Feng and Xuanfu Li and Zhan Xu},
+  journal = {arXiv preprint arXiv:2603.22893},
+  year = {2026},
+  note = {Available at \url{https://doi.org/10.48550/arXiv.2603.22893}},
+  archivePrefix = {arXiv},
+  eprint = {2603.22893},
+  primaryClass = {cs.CV}
+}</pre>
+      <button id="copy-bib">Copy BibTeX</button>
+      <span id="copy-msg" class="copy-msg">✔</span>
+    </section>
+
+    <section id="acknowledgement" class="section-card">
+      <h2>Acknowledgements</h2>
+      <p>We appreciate the code of the <a href="https://github.com/NVlabs/GaussianSTORM">STORM</a> open source project.</p>
+    </section>
+  </main>
+  
+  <footer class="footer">
+    <div class="container">
+      <p>CVPR&nbsp;2026&nbsp;&nbsp;&nbsp;&nbsp;SLARM</p>
+    </div>
+  </footer>     
+
+    <!-- loading KaTeX -->
+    <script src="./katex/katex.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mathElements = document.querySelectorAll('.math-inline');
+            mathElements.forEach(element => {
+                katex.render(element.textContent, element, {
+                    throwOnError: false,  
+                    displayMode: false    
+                });
+            });
+        });
+    </script>
+
+  </body>

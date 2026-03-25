@@ -1,0 +1,401 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #333;
+  background-color: #fff;
+  line-height: 1.6;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  background: rgba(240, 240, 255, 0.85);
+  background-image: url('https://source.unsplash.com/random/1920x1080/?abstract,tech');
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: overlay;
+  padding: 40px 0;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+}
+
+.header .container {
+  padding: 40px 20px;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.authors,
+.affiliations {
+  text-align: center;
+  color: #555;
+}
+
+.authors {
+  font-size: 1.5rem;
+}
+
+.affiliations {
+  font-size: 1.2rem;
+}
+
+.links-container {
+  text-align: center;
+}
+
+.links-container span {
+  font-size: 24px;
+}
+
+#abstract,
+#model,
+#results,
+#demo-video,
+#viser,
+#bibtex,
+#acknowledgement {
+  margin-top: 40px;
+}
+
+#abstract h2,
+#model h2,
+#results h2,
+#demo-video h2,
+#viser h2 {
+  text-align: center;
+  font-size: 2.0rem;
+}
+#bibtex h2,
+#acknowledgement h2 {
+  font-size: 1.5rem;
+}
+
+#abstract p,
+#model p,
+#results p,
+#demo-video p {
+  margin-top: 10px;
+  font-size: 1.0rem;
+  text-align: justify;
+  line-height: 1.5;
+}
+
+.overview-image {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.overview-image img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.streaming-vedio {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.example-card {
+  margin-bottom: 40px;
+}
+
+.example-card h3 {
+  margin-bottom: 10px;
+}
+
+.grid-2x2,
+.grid-1x2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.grid-5x2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.grid-1x1 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 50px;
+  align-items: center;
+  justify-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.grid-1x1 img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table3-container {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.time-img {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.time-img img {
+  width: 100%;
+  height: auto;
+}
+
+.grid-2x2 video,
+.grid-1x2 video {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.grid-5x2 video {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  height: auto;
+}
+
+.video-loading {
+  opacity: 0.7;
+}
+
+#demo-video video {
+  max-width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.section-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+  max-width: none;
+}
+
+.section-card h2 {
+  margin-top: 0;
+  color: #2c3e50;
+  border-bottom: 2px solid #4a90e2;
+  padding-bottom: 0;
+}
+
+.viser-frame {
+  width: 100%;
+  height: 500px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+
+.video-selector {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #f0f2f5;
+  border-radius: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.selector-item {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.selector-item:hover {
+  background-color: #e9ecef;
+  border-color: #aaa;
+}
+
+.selector-item.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+  font-weight: bold;
+}
+
+.video-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 10px;
+  padding: 10px 0;
+  scrollbar-width: thin;
+}
+
+.slide {
+  display: flex;
+  flex: 0 0 100%;
+  gap: 10px;
+  min-width: 100%;
+}
+
+.auto-play-video-slide {
+  width: auto;
+  height: 450px;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: #000;
+  }
+
+.auto-play-video {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.slider-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.prev-btn,
+.next-btn {
+  background: #007BFF;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  font-size: 1.5em;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.prev-btn:hover,
+.next-btn:hover {
+  background: #0056b3;
+}
+
+.dots-container {
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background: #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.dot.active {
+  background: #007BFF;
+}
+
+@media (max-width: 768px) {
+  .video-slider {
+    gap: 5px;
+  }
+
+  .slide {
+    gap: 5px;
+  }
+
+  .auto-play-video {
+    height: 200px;
+  }
+
+  .slider-controls {
+    gap: 10px;
+  }
+
+  .prev-btn,
+  .next-btn {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+#bibtex pre {
+  background-color: #f4f4f4;
+  padding: 15px;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+#copy-bib {
+  margin-top: 10px;
+  padding: 8px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.copy-msg {
+  margin-left: 10px;
+  color: green;
+  display: none;
+}
+
+.footer {
+  margin-top: 80px;
+  padding: 20px 0;
+  background: rgba(240, 240, 255, 0.85);
+  border-top: 1px solid #ddd;
+  text-align: center;
+  font-size: 1.5rem;
+}
